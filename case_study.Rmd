@@ -1,6 +1,6 @@
 ---
 title: "case_study"
-output: github_document
+output: html_document
 ---
 
 Load in a dataset that we'll use often
@@ -127,7 +127,7 @@ nyc_airbnb %>%
 
 ## retry leaflet 
 
-```{r, eval = FALSE}
+```{r}
 
 pal = colorNumeric("viridis", NULL)
 
