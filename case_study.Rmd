@@ -8,6 +8,7 @@ Load in a dataset that we'll use often
 ```{r}
 library(tidyverse)
 library(p8105.datasets)
+library(leaflet)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -124,7 +125,16 @@ nyc_airbnb %>%
   geom_point(alpha = .5)
 ```
 
+## retry leaflet 
 
+```{r, eval = FALSE}
+nyc_airbnb %>% 
+  filter(price <500) %>% 
+  sample_n(1000) %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(~lat, ~long)
+```
 
 
 

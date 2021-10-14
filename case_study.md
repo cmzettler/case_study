@@ -20,6 +20,7 @@ library(tidyverse)
 
 ``` r
 library(p8105.datasets)
+library(leaflet)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -193,3 +194,14 @@ nyc_airbnb %>%
 ```
 
 <img src="case_study_files/figure-gfm/unnamed-chunk-9-2.png" width="90%" />
+
+## retry leaflet
+
+``` r
+nyc_airbnb %>% 
+  filter(price <500) %>% 
+  sample_n(1000) %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(~lat, ~long)
+```
