@@ -1,0 +1,105 @@
+---
+title: "case_study"
+output: github_document
+---
+
+Load in a dataset that we'll use often
+
+```{r}
+library(tidyverse)
+library(p8105.datasets)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Load a dataset
+
+```{r}
+data("nyc_airbnb")
+
+view(nyc_airbnb)
+```
+
+Questions that we might be interested in asking using this: 
+* Is price correlated with review score? 
+* Which neighborhood is most popular? 
+* Which neighborhood is the most expensive? 
+* Which neighborhood has the highest reviews? 
+* Is availability related to price? 
+* Is room type related to neighborhood? 
+* Is length of stay related to neighborhood group (borough)? 
+
+Start with: How many rentals are there? Of what type? In what places? 
+
+```{r}
+nyc_airbnb = nyc_airbnb %>% 
+  mutate(stars = review_scores_location/2) %>% 
+  rename(borough = neighbourhood_group)
+```
+
+Let's try to count things: 
+
+```{r}
+nyc_airbnb %>% 
+  count(borough)
+```
+
+Number of units per borough
+
+```{r}
+nyc_airbnb %>% 
+  janitor::tabyl(borough, room_type)
+
+nyc_airbnb %>% 
+  count(borough, room_type) %>% 
+  pivot_wider(
+    names_from = room_type, 
+    values_from = n)
+```
+
+Case Study: Is price correlated with review score?
+
+```{r}
+nyc_airbnb %>% 
+  drop_na(stars) %>% 
+  ggplot(aes(x = stars, y = price)) + 
+  geom_point() +
+  facet_grid(. ~ borough)
+```
+
+With the class 
+```{r}
+nyc_airbnb %>% 
+  ggplot(aes(x=stars, y = price)) + 
+  geom_point() + 
+  facet_grid(. ~ room_type)
+```
+
+Price and neighborhood 
+```{r}
+nyc_airbnb %>% 
+  filter(borough == "Manhattan") %>% 
+  group_by(neighbourhood) %>% 
+  summarize(mean_price = mean(price, na.rm = TRUE)) %>% 
+  arrange(mean_price)
+```
+
+
+
+
+
+
