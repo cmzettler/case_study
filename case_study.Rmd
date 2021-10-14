@@ -127,9 +127,15 @@ nyc_airbnb %>%
 
 ## retry leaflet 
 
-```{r}
+```{r, eval = FALSE}
 
 pal = colorNumeric("viridis", NULL)
+
+nyc_airbnb %>% 
+  mutate(
+    labels = str_c("<b>Price:", price "</b><br>Stars:", stars)
+  ) %>% 
+  view()
 
 nyc_airbnb %>% 
   filter(price <500) %>% 
