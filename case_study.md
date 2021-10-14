@@ -113,8 +113,83 @@ Case Study: Is price correlated with review score?
 ``` r
 nyc_airbnb %>% 
   drop_na(stars) %>% 
-  ggplot(aes(x = stars, y = price, color = borough)) + 
-  geom_point()
+  ggplot(aes(x = stars, y = price)) + 
+  geom_point() +
+  facet_grid(. ~ borough)
 ```
 
 <img src="case_study_files/figure-gfm/unnamed-chunk-6-1.png" width="90%" />
+
+With the class
+
+``` r
+nyc_airbnb %>% 
+  ggplot(aes(x=stars, y = price)) + 
+  geom_point() + 
+  facet_grid(. ~ room_type)
+```
+
+    ## Warning: Removed 10037 rows containing missing values (geom_point).
+
+<img src="case_study_files/figure-gfm/unnamed-chunk-7-1.png" width="90%" />
+
+Price and neighborhood
+
+``` r
+nyc_airbnb %>% 
+  filter(borough == "Manhattan") %>% 
+  group_by(neighbourhood) %>% 
+  summarize(mean_price = mean(price, na.rm = TRUE)) %>% 
+  arrange(mean_price)
+```
+
+    ## # A tibble: 32 × 2
+    ##    neighbourhood       mean_price
+    ##    <chr>                    <dbl>
+    ##  1 Marble Hill               83.6
+    ##  2 Inwood                    86.5
+    ##  3 Washington Heights        90.1
+    ##  4 Morningside Heights      107. 
+    ##  5 Harlem                   117. 
+    ##  6 Roosevelt Island         122. 
+    ##  7 Two Bridges              123. 
+    ##  8 East Harlem              128. 
+    ##  9 Chinatown                158. 
+    ## 10 Upper East Side          172. 
+    ## # … with 22 more rows
+
+``` r
+nyc_airbnb %>% 
+  filter(borough == "Manhattan", price <= 1000) %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+  ggplot(aes(x = neighbourhood, y = price)) + 
+  geom_boxplot() + 
+  coord_flip() + 
+  facet_grid(. ~ room_type) 
+```
+
+<img src="case_study_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
+
+Being close to a subway/ major landmark? \* Not prepared to answer this
+because we don’t have this data in the df
+
+## PRice vs. location
+
+``` r
+nyc_airbnb %>% 
+  sample_n(5000) %>% 
+  ggplot(aes(x = lat, y = long, color = price)) + 
+  geom_point()
+```
+
+<img src="case_study_files/figure-gfm/unnamed-chunk-9-1.png" width="90%" />
+
+``` r
+nyc_airbnb %>% 
+  filter(price < 500) %>% 
+  sample_n(5000) %>% 
+  ggplot(aes(x = lat, y = long, color = price)) + 
+  geom_point(alpha = .5)
+```
+
+<img src="case_study_files/figure-gfm/unnamed-chunk-9-2.png" width="90%" />

@@ -96,6 +96,32 @@ nyc_airbnb %>%
   group_by(neighbourhood) %>% 
   summarize(mean_price = mean(price, na.rm = TRUE)) %>% 
   arrange(mean_price)
+
+nyc_airbnb %>% 
+  filter(borough == "Manhattan", price <= 1000) %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+  ggplot(aes(x = neighbourhood, y = price)) + 
+  geom_boxplot() + 
+  coord_flip() + 
+  facet_grid(. ~ room_type) 
+```
+
+Being close to a subway/ major landmark? 
+* Not prepared to answer this because we don't have this data in the df 
+
+## PRice vs. location 
+
+```{r}
+nyc_airbnb %>% 
+  sample_n(5000) %>% 
+  ggplot(aes(x = lat, y = long, color = price)) + 
+  geom_point()
+
+nyc_airbnb %>% 
+  filter(price < 500) %>% 
+  sample_n(5000) %>% 
+  ggplot(aes(x = lat, y = long, color = price)) + 
+  geom_point(alpha = .5)
 ```
 
 
